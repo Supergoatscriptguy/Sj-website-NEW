@@ -1,12 +1,16 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ReactNode, MouseEvent } from 'react';
 import { motion } from 'framer-motion';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   children: ReactNode;
   href?: string;
   icon?: ReactNode;
+  className?: string;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export function Button({
@@ -16,7 +20,9 @@ export function Button({
   href,
   icon,
   className = '',
-  ...props
+  onClick,
+  disabled,
+  type = 'button',
 }: ButtonProps) {
   const baseStyles = 'inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap';
 
@@ -53,10 +59,12 @@ export function Button({
 
   return (
     <motion.button
+      type={type}
       className={classes}
+      onClick={onClick}
+      disabled={disabled}
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
-      {...props}
     >
       {icon && <span className="w-5 h-5">{icon}</span>}
       {children}
