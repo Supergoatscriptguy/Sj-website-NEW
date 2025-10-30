@@ -113,7 +113,7 @@ export default function GameInfo() {
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 text-white">
-                        <Icon size={20} />
+                        <Icon />
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-white mb-1">
