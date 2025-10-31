@@ -100,7 +100,7 @@ export default function Footer() {
             Website designed and developed by Micah | This is the official Sorcerer&apos;s Journey website
           </p>
           <p className="text-slate-600 text-xs mt-2">
-            v1.0.2
+            v1.0.4
           </p>
         </div>
       </div>
