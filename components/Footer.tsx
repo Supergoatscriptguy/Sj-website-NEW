@@ -99,9 +99,9 @@ export default function Footer() {
           <p className="text-slate-500">
             Website designed and developed by Micah | This is the official Sorcerer&apos;s Journey website
           </p>
-          <p className="text-slate-600 text-xs mt-2">
-            v1.0.4
-          </p>
+          <Link href="/secret" className="text-slate-600 hover:text-slate-400 text-xs mt-2 inline-block transition-colors cursor-pointer">
+            v1.0.5
+          </Link>
         </div>
       </div>
     </footer>
