@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Sparkles, X, Filter } from 'lucide-react';
+import { Sparkles, X, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/Badge';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { StaggerContainer, StaggerItem } from '@/components/AnimatedSection';
@@ -19,6 +19,7 @@ interface GalleryItem {
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState<GalleryCategory>('all');
   const [lightboxImage, setLightboxImage] = useState<GalleryItem | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const galleryItems: GalleryItem[] = [
     { src: '/images/Sendai.png', title: 'Sendai Village', description: 'Starting area for new sorcerers', category: 'locations' },
@@ -47,6 +48,33 @@ export default function Gallery() {
   const filteredItems = activeFilter === 'all'
     ? galleryItems
     : galleryItems.filter(item => item.category === activeFilter);
+
+  const openLightbox = (item: GalleryItem) => {
+    const index = filteredItems.findIndex(i => i.src === item.src);
+    setCurrentIndex(index);
+    setLightboxImage(item);
+  };
+
+  const navigateLightbox = (direction: 'prev' | 'next') => {
+    const newIndex = direction === 'next'
+      ? (currentIndex + 1) % filteredItems.length
+      : (currentIndex - 1 + filteredItems.length) % filteredItems.length;
+    setCurrentIndex(newIndex);
+    setLightboxImage(filteredItems[newIndex]);
+  };
+
+  useEffect(() => {
+    if (!lightboxImage) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxImage(null);
+      if (e.key === 'ArrowLeft') navigateLightbox('prev');
+      if (e.key === 'ArrowRight') navigateLightbox('next');
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxImage, currentIndex, filteredItems]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
@@ -101,7 +129,7 @@ export default function Gallery() {
             {filteredItems.map((item, index) => (
               <StaggerItem key={index}>
                 <div
-                  onClick={() => setLightboxImage(item)}
+                  onClick={() => openLightbox(item)}
                   className="group relative aspect-video overflow-hidden rounded-2xl cursor-pointer bg-slate-900 border border-white/10 hover:border-white/20 transition-all"
                 >
                   <Image
@@ -135,11 +163,36 @@ export default function Gallery() {
         >
           <button
             onClick={() => setLightboxImage(null)}
-            className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+            className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all z-10"
           >
             <X className="w-6 h-6 text-white" />
           </button>
-          <div className="max-w-6xl w-full">
+
+          {/* Navigation Arrows */}
+          {filteredItems.length > 1 && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateLightbox('prev');
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-lg transition-all z-10"
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateLightbox('next');
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-lg transition-all z-10"
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </button>
+            </>
+          )}
+
+          <div className="max-w-6xl w-full" onClick={(e) => e.stopPropagation()}>
             <div className="relative aspect-video w-full mb-6 rounded-2xl overflow-hidden">
               <Image
                 src={lightboxImage.src}
@@ -151,6 +204,9 @@ export default function Gallery() {
             <div className="text-center">
               <h2 className="text-3xl font-bold text-white mb-2">{lightboxImage.title}</h2>
               <p className="text-slate-400 text-lg">{lightboxImage.description}</p>
+              <p className="text-slate-600 text-sm mt-2">
+                {currentIndex + 1} / {filteredItems.length}
+              </p>
             </div>
           </div>
         </div>

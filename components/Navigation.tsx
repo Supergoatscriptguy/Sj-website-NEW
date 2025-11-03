@@ -13,6 +13,7 @@ const navLinks = [
   { href: '/locations', label: 'Locations' },
   { href: '/characters', label: 'Characters' },
   { href: '/gallery', label: 'Gallery' },
+  { href: '/updates', label: 'Updates' },
   { href: '/credits', label: 'Credits' },
 ];
 
