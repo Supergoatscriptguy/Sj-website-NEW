@@ -1,8 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Badge } from '@/components/Badge';
 import { Breadcrumb } from '@/components/Breadcrumb';
-import { StaggerContainer, StaggerItem } from '@/components/AnimatedSection';
 
 const DiscordIcon = () => (
   <svg width="20" height="20" viewBox="0 0 71 55" fill="currentColor">
@@ -21,6 +21,39 @@ const RobloxIcon = () => (
 );
 
 export default function GameInfo() {
+  const [gameActive, setGameActive] = useState(false);
+  const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(10);
+  const [targetPosition, setTargetPosition] = useState({ x: 50, y: 50 });
+
+  const startGame = () => {
+    setGameActive(true);
+    setScore(0);
+    setTimeLeft(10);
+    moveTarget();
+  };
+
+  const moveTarget = () => {
+    setTargetPosition({
+      x: Math.random() * 80 + 10,
+      y: Math.random() * 80 + 10,
+    });
+  };
+
+  const handleTargetClick = () => {
+    setScore(prev => prev + 1);
+    moveTarget();
+  };
+
+  useEffect(() => {
+    if (gameActive && timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0) {
+      setGameActive(false);
+    }
+  }, [gameActive, timeLeft]);
+
   const links = [
     {
       title: 'Discord Server',
@@ -60,75 +93,131 @@ export default function GameInfo() {
         </div>
       </section>
 
-      {/* About Section */}
+      {/* Main Content Grid */}
       <section className="pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10">
-            <h2 className="text-3xl font-bold text-white mb-6">About the Game</h2>
-            <p className="text-lg text-slate-300 mb-6 leading-relaxed">
-              Sorcerer&apos;s Journey is an Roblox open world JJK (Jujutsu Kaisen) experience.
-              You can explore diverse locations, master cursed techniques, and battle opponents in
-              this thrilling RPG adventure.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <span className="text-blue-400 mr-3 text-xl">✓</span>
-                <span className="text-slate-300">Jujutsu Kaisen inspired gameplay</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-400 mr-3 text-xl">✓</span>
-                <span className="text-slate-300">Continuous updates with new content</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-400 mr-3 text-xl">✓</span>
-                <span className="text-slate-300">Active developer support and community</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-400 mr-3 text-xl">✓</span>
-                <span className="text-slate-300">Currently still in development, game will release in "2030" (probably sooner)</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* About Section - Takes up 2 columns */}
+            <div className="lg:col-span-2">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 h-full">
+                <h2 className="text-3xl font-bold text-white mb-6">About the Game</h2>
+                <p className="text-lg text-slate-300 mb-6 leading-relaxed">
+                  Sorcerer&apos;s Journey is a Roblox open world JJK (Jujutsu Kaisen) experience.
+                  Explore diverse locations, master cursed techniques, and battle opponents in
+                  this thrilling RPG adventure.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <span className="text-blue-400 mr-3 text-xl">✓</span>
+                    <span className="text-slate-300">Jujutsu Kaisen inspired gameplay</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-400 mr-3 text-xl">✓</span>
+                    <span className="text-slate-300">Continuous updates with new content</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-400 mr-3 text-xl">✓</span>
+                    <span className="text-slate-300">Active developer support and community</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-400 mr-3 text-xl">✓</span>
+                    <span className="text-slate-300">Currently still in development, game will release in "2030" (probably sooner)</span>
+                  </li>
+                </ul>
 
-      {/* Links Section */}
-      <section className="py-16 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-white text-center mb-12">
-            Useful Links
-          </h2>
+                {/* Links inside About Section */}
+                <div className="pt-6 border-t border-white/10">
+                  <h3 className="text-xl font-bold text-white mb-4">Community Links</h3>
+                  <div className="space-y-3">
+                    {links.map((link, index) => {
+                      const Icon = link.icon;
+                      return (
+                        <a
+                          key={index}
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group block p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 text-white">
+                              <Icon />
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-base font-semibold text-white mb-1">
+                                {link.title}
+                              </h4>
+                              <p className="text-sm text-slate-400">
+                                {link.description}
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <StaggerContainer className="space-y-4">
-            {links.map((link, index) => {
-              const Icon = link.icon;
+            {/* Quick Stats Sidebar */}
+            <div className="space-y-6">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                <h3 className="text-xl font-bold text-white mb-4">Quick Stats</h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-slate-400 text-sm mb-1">Status</p>
+                    <p className="text-white font-semibold">In Development</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-400 text-sm mb-1">Platform</p>
+                    <p className="text-white font-semibold">Roblox</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-400 text-sm mb-1">Genre</p>
+                    <p className="text-white font-semibold">Open World RPG</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-400 text-sm mb-1">Theme</p>
+                    <p className="text-white font-semibold">Jujutsu Kaisen</p>
+                  </div>
+                </div>
+              </div>
 
-              return (
-                <StaggerItem key={index}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block p-6 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+              {/* Reaction Game */}
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                <h3 className="text-xl font-bold text-white mb-2">Reaction Test</h3>
+                <p className="text-slate-400 text-sm mb-4">Click the target!</p>
+
+                <div className="flex justify-between items-center mb-3">
+                  <p className="text-slate-400 text-sm">Score: <span className="text-white font-semibold">{score}</span></p>
+                  <p className="text-slate-400 text-sm">Time: <span className="text-white font-semibold">{gameActive ? timeLeft : 10}s</span></p>
+                </div>
+
+                {!gameActive ? (
+                  <button
+                    onClick={startGame}
+                    className="w-full py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 mb-3"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 text-white">
-                        <Icon />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-white mb-1">
-                          {link.title}
-                        </h3>
-                        <p className="text-sm text-slate-400">
-                          {link.description}
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </StaggerItem>
-              );
-            })}
-          </StaggerContainer>
+                    {timeLeft === 0 ? 'Play Again' : 'Start Game'}
+                  </button>
+                ) : (
+                  <div className="relative w-full h-32 rounded-lg bg-slate-800/30 border border-white/10 overflow-hidden mb-3">
+                    <button
+                      onClick={handleTargetClick}
+                      style={{
+                        position: 'absolute',
+                        left: `${targetPosition.x}%`,
+                        top: `${targetPosition.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                      className="w-8 h-8 rounded-full bg-blue-400 hover:bg-blue-300 transition-colors"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
