@@ -33,7 +33,7 @@ export default function Credits() {
 
   const teamMembers = [
     {
-      name: 'Micah',
+      name: 'Snuggly',
       role: 'Website Designer & Developer',
       link: 'https://www.roblox.com/users/7763902442/profile',
       image: 'https://cdn.discordapp.com/avatars/1097523343638405150/a_865db7a66cffa9e38974025efd26e589.webp?size=80&animated=true',

@@ -98,10 +98,10 @@ export default function Footer() {
         <div className="pt-8 border-t border-slate-800 text-center text-sm text-slate-400 space-y-2">
           <p>© 2025 Sorcerer&apos;s Journey. All rights reserved. Not affiliated with Jujutsu Kaisen or MAPPA.</p>
           <p className="text-slate-500">
-            Website designed and developed by Micah | This is the official Sorcerer&apos;s Journey website
+            Website designed and developed by Snuggly | This is the official Sorcerer&apos;s Journey website
           </p>
           <Link href="/secret" className="text-slate-600 hover:text-slate-400 text-xs mt-2 inline-block transition-colors cursor-pointer">
-            v1.0.8
+            v1.0.9
           </Link>
         </div>
       </div>
