@@ -46,13 +46,13 @@ export default function Credits() {
       isOwner: true,
     },
     {
-      name: 'WIS',
+      name: 'ayowis',
       role: 'Main Modeler',
-      link: '',
+      link: 'https://www.roblox.com/users/1401655597/profile',
       image: '/images/DevIcons/Ayowis.webp',
     },
     {
-      name: 'itokibo',
+      name: 'kibo',
       role: 'Main VFX',
       link: 'https://www.roblox.com/users/3768904127/profile',
       image: '/images/DevIcons/Itokibo.webp',
